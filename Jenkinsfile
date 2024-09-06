@@ -25,6 +25,12 @@ pipeline {
                 sh 'mvn test'
             }
         }
+        stage('Test SonarQube Connection') {
+            steps {
+                // Testa se a conexão com o SonarQube está funcionando
+                sh 'curl http://172.19.0.3:9000'
+            }
+        }
         stage('SonarQube Analysis') {
             steps {
                 withCredentials([string(credentialsId: 'SonarToken', variable: 'sonarToken')]) {
