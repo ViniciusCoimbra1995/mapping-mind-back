@@ -32,7 +32,7 @@ pipeline {
                         mvn clean verify sonar:sonar \
                         -Dsonar.projectKey=mapping-mind-back \
                         -Dsonar.projectName='mapping-mind-back' \
-                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.host.url=http://172.19.0.3:9000 \
                         -Dsonar.token=$sonarToken
                     """
                 }
