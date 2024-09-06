@@ -25,6 +25,19 @@ pipeline {
                 sh 'mvn test'
             }
         }
+        stage('SonarQube Analysis') {
+            steps {
+                withCredentials([string(credentialsId: 'SonarToken', variable: 'sonarToken')]) {
+                    sh """
+                        mvn clean verify sonar:sonar \
+                        -Dsonar.projectKey=mapping-mind-back \
+                        -Dsonar.projectName='mapping-mind-back' \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.token=$sonarToken
+                    """
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 script {
