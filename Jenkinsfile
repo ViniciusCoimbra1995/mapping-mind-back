@@ -28,19 +28,17 @@ pipeline {
         stage('Test SonarQube Connection') {
             steps {
                 // Testa se a conexão com o SonarQube está funcionando
-                sh 'curl http://172.19.0.3:9000'
+                sh 'curl http://172.19.0.3:9000/'
             }
         }
         stage('SonarQube Analysis') {
+        	environment {
+        		scannerHome = tool 'SONAR_SCANNER'
+        	}
             steps {
-                withCredentials([string(credentialsId: 'SonarToken', variable: 'sonarToken')]) {
-                    sh """
-                        mvn clean verify sonar:sonar \
-                        -Dsonar.projectKey=mapping-mind-back \
-                        -Dsonar.projectName='mapping-mind-back' \
-                        -Dsonar.host.url=http://172.19.0.3:9000 \
-                        -Dsonar.login=$sonarToken
-                    """
+                withSonarQubeEnv('SONAR_LOCAL') {
+                   echo "mvn clean verify sonar:sonar -Dsonar.projectKey=mapping-mind-back -Dsonar.projectName='mapping-mind-back' -Dsonar.host.url=http://172.19.0.3:9000 -Dsonar.login=$sonarToken"
+                    
                 }
             }
         }
